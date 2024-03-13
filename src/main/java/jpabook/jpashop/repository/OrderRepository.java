@@ -107,4 +107,14 @@ public class OrderRepository {
                         " join fetch o.delivery d", Order.class
         ).getResultList();
     }
+
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                        "select distinct o from Order o " + //어 강사님 DB에도 distinct 있는데요..!
+                                "join fetch o.member m " +           //DB는 모든 한줄이 똑같아야 distinct 가 적용됨, 근데 JPA의 distinct는 자체적으로 order가 같은 아이디값이면 하나를 버림
+                                "join fetch o.delivery d " +
+                                "join fetch o.orderItems oi " +
+                                "join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }
