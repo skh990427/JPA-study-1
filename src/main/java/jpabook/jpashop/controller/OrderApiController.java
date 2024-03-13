@@ -73,7 +73,7 @@ public class OrderApiController {
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "100") int limit)
     {
-        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit); // application.properties에 spring.jpa.properties.hibernate.default_batch_fetch_size=100 추가
 
         List<OrderDto> result = orders.stream()
                 .map(OrderDto::new)
