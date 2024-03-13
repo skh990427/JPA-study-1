@@ -22,6 +22,10 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
 
+    /**
+     * V1. 엔티티 직접 노출
+     * - Hibernate5Module 모듈 등록, LAZY=null 처리 * - 양방향 관계 문제 발생 -> @JsonIgnore
+     */
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
@@ -35,6 +39,10 @@ public class OrderApiController {
         return all;
     }
 
+    /**
+     * V2. 엔티티를 조회해서 DTO로 변환(fetch join 사용X)
+     * - 트랜잭션 안에서 지연 로딩 필요
+     */
     @GetMapping("/api/v2/orders")
     public List<OrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
@@ -45,6 +53,10 @@ public class OrderApiController {
         return result;
     }
 
+    /**
+     * V3. 엔티티를 조회해서 DTO로 변환(fetch join 사용O)
+     * 페이징 시에는 N 부분을 포기해야함(대신에 batch fetch size? 옵션 주면 N -> 1 쿼리로 변경 가능)
+     */
     @GetMapping("/api/v3/orders")
     public List<OrderDto> ordersV3() {
         List<Order> orders = orderRepository.findAllWithItem();
