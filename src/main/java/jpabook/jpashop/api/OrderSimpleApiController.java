@@ -10,6 +10,7 @@ import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -62,7 +63,8 @@ public class OrderSimpleApiController {
      * - fetch join으로 쿼리 1번 호출
      */
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3() {
+    public List<SimpleOrderDto> ordersV3()
+    {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
 
         List<SimpleOrderDto> result = orders.stream()
