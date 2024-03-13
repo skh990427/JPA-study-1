@@ -114,7 +114,9 @@ public class OrderRepository {
                                 "join fetch o.member m " +           //DB는 모든 한줄이 똑같아야 distinct 가 적용됨, 근데 JPA의 distinct는 자체적으로 order가 같은 아이디값이면 하나를 버림
                                 "join fetch o.delivery d " +
                                 "join fetch o.orderItems oi " +
-                                "join fetch oi.item i", Order.class)
+                                "join fetch oi.item i", Order.class) //컬렉션 fetch 조인은 반드시 딱 하나만 해야한다.
+                .setFirstResult(1) //컬렉션 패치 조인을 사용하면 페이징이 불가능함
+                .setMaxResults(100) //경고로그를 남기면서 메모리에서 페이징해버리는데 굉장히 위험하니 절대 쓰지말자
                 .getResultList();
     }
 }
